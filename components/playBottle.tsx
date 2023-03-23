@@ -4,22 +4,31 @@ import { useContext, useEffect, useRef, useState } from "react";
 const PlayBottleVideo = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const Bottle = useContext(BottleContext) as any;
-  const { durationVideo, duration, durationTimeout } = Bottle;
+  const { duration, durationTimeout } = Bottle;
   const [ended, setEnded] = useState(false);
+  const [counterSeconds, setCounterSeconds] = useState(0);
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {
-      if (videoRef.current.currentTime >= 20) {
-        videoRef.current.playbackRate = 1;
+      if (videoRef.current.currentTime >= 20 && counterSeconds < duration) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play();
       }
     }
   };
 
   useEffect(() => {
+    if (counterSeconds != duration) {
+      const interval = setInterval(() => {
+        setCounterSeconds((counterSeconds) => counterSeconds + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [counterSeconds]);
+
+  useEffect(() => {
     if (videoRef.current) {
       videoRef.current.play();
-      const newDuration = durationVideo / duration;
-      videoRef.current.playbackRate = newDuration;
     }
   }, [duration]);
 
@@ -29,13 +38,14 @@ const PlayBottleVideo = () => {
         if (videoRef.current) {
           videoRef.current.currentTime = 0;
           videoRef.current.play();
+          setCounterSeconds(0);
         }
       }, durationTimeout * 1000);
     }
   }, [ended, durationTimeout]);
 
   return (
-    <div className="min-w-[500px] h-[600px]">
+    <div className="min-w-[500px] h-screen">
       <video
         ref={videoRef}
         src="liquidBottle.mp4"
