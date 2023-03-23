@@ -1,2 +1,1 @@
 export const SET_DURATION = "SET_DURATION";
-export const SET_DISABLE_FORM = "SET_DISABLE_FORM";

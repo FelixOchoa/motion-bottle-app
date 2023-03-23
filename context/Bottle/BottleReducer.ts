@@ -1,4 +1,4 @@
-import { SET_DISABLE_FORM, SET_DURATION } from "../types";
+import { SET_DURATION } from "../types";
 
 export const BottleReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -6,11 +6,6 @@ export const BottleReducer = (state: any, action: any) => {
       return {
         ...state,
         duration: action.payload,
-      };
-    case SET_DISABLE_FORM:
-      return {
-        ...state,
-        disableForm: action.payload,
       };
     default:
       return state;
