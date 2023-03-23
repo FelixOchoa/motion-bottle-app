@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 const PlayBottleVideo = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const Bottle = useContext(BottleContext) as any;
-  const { durationVideo, duration } = Bottle;
+  const { durationVideo, duration, durationTimeout } = Bottle;
   const [ended, setEnded] = useState(false);
 
   const handleTimeUpdate = () => {
@@ -21,7 +21,7 @@ const PlayBottleVideo = () => {
       const newDuration = durationVideo / duration;
       videoRef.current.playbackRate = newDuration;
     }
-  }, []);
+  }, [duration]);
 
   useEffect(() => {
     if (ended) {
@@ -30,9 +30,9 @@ const PlayBottleVideo = () => {
           videoRef.current.currentTime = 0;
           videoRef.current.play();
         }
-      }, 5000);
+      }, durationTimeout * 1000);
     }
-  }, [ended]);
+  }, [ended, durationTimeout]);
 
   return (
     <div className="min-w-[500px] h-[600px]">
